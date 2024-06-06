@@ -8,9 +8,14 @@ const MultipleReturnsFetchData = () => {
   useEffect(() => {
     const fetchUser = async () => {
       try {
-        const result = await fetch(url);
-        const user = await result.json();
-        // console.log(user);
+        const resp = await fetch(url);
+        if (!resp.ok) {
+          setIsError(true);
+          setIsLoading(false);
+          return;
+        }
+        const user = await resp.json();
+
         setUser(user);
       } catch (error) {
         setIsError(true);
@@ -27,17 +32,17 @@ const MultipleReturnsFetchData = () => {
   if (isError) {
     return <h2>There was an error...</h2>;
   }
-
+  const { avatar_url, name, company, bio } = user;
   return (
     <div>
       <img
-        src={user.avatar_url}
-        alt={user.name}
+        src={avatar_url}
+        alt={name}
         style={{ width: '150px', borderRadius: '10px' }}
       />
-      <h2>{user.name}</h2>
-      <h4>{user.company}</h4>
-      <p>{user.bio}</p>
+      <h2>{name}</h2>
+      <h4>{company}</h4>
+      <p>{bio}</p>
     </div>
   );
 };
